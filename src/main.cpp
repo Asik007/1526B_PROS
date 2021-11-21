@@ -1,19 +1,79 @@
 #include "main.h"
 
 /**
- * A callback function for LLEMU's center button.
+ * Disables all tasks.
  *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
+ * This runs during disabled and initialize to turn off all user created tasks.
  */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+void
+disable_all_tasks() {
+  drive_pid.suspend();
+}
+
+/**
+ * Autonomous selector using LLEMU.
+ *
+ * When this function is called, display the current selected auton to the brain.
+ * When is_auton is true, the autonomous mode will run.  Otherwise, it will only
+ * print to brain.
+ */
+const int num_of_pages = 6; // Number of pages
+int current_page = 0;
+
+void
+auto_select(bool is_auton) {
+  for (int i=0; i<7; i++)
+    pros::lcd::clear_line(i);
+
+  pros::lcd::set_text(0, "Autonomous "+std::to_string(current_page+1));
+
+  switch (current_page) {
+    case 0: // Auto 1
+      pros::lcd::set_text(1, "Test Auton");
+      if (is_auton) test_auton();
+      break;
+    case 1: // Auto 2
+      pros::lcd::set_text(1, "Auton 1");
+      if (is_auton) auto_1();
+      break;
+    case 2: // Auto 3
+      pros::lcd::set_text(1, "Auton 2");
+      if (is_auton) auto_2();
+      break;
+    case 3: // Auto 4
+      pros::lcd::set_text(1, "Auton 3");
+      if (is_auton) auto_3();
+      break;
+    case 4: // Auto 5
+      pros::lcd::set_text(1, "Auton 4");
+      if (is_auton) auto_4();
+      break;
+    case 5: // Auto 6
+      pros::lcd::set_text(1, "Auton 5");
+      if (is_auton) auto_5();
+      break;
+
+    default:
+      break;
+  }
+}
+
+// Page up/down
+void
+page_up() {
+  if(current_page==num_of_pages-1)
+    current_page=0;
+  else
+    current_page++;
+  auto_select(false);
+}
+void
+page_down() {
+  if(current_page==0)
+    current_page=num_of_pages-1;
+  else
+    current_page--;
+  auto_select(false);
 }
 
 /**
@@ -22,11 +82,22 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+void
+initialize() {
+  print_ez_template();
+  pros::delay(500);
 
-	pros::lcd::register_btn1_cb(on_center_button);
+  disable_all_tasks();
+
+  pros::lcd::initialize();
+  auto_select(false);
+  pros::lcd::register_btn0_cb(page_down);
+  pros::lcd::register_btn2_cb(page_up);
+  if(!imu_calibrate()) {
+    pros::lcd::set_text(7, "IMU failed to calibrate!");
+  }
+
+  chassis_motor_init();
 }
 
 /**
@@ -34,7 +105,10 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void
+disabled() {
+  disable_all_tasks();
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -45,7 +119,10 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void
+competition_initialize() {
+  disable_all_tasks();
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -58,7 +135,15 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void
+autonomous() {
+  tare_gyro();
+  reset_drive_sensor();
+  set_drive_brake(MOTOR_BRAKE_HOLD);
+  drive_pid.resume();
+
+  auto_select(true);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -73,20 +158,15 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+void
+opcontrol() {
+  drive_pid.suspend();
+  reset_drive_sensor();
+  set_drive_brake(MOTOR_BRAKE_COAST); // This is preference to what you like to drive on
 
-	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+  while (true) {
+    chassis_joystick_control();
 
-		left_mtr = left;
-		right_mtr = right;
-		pros::delay(20);
-	}
+    pros::delay(DELAY_TIME);
+  }
 }
