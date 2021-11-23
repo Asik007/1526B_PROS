@@ -47,6 +47,7 @@
 #include "EZ-Template/auton_drive_functions.hpp"
 // More includes here...
 #include "autons.hpp"
+#include "ETC.h"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

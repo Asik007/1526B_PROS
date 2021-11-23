@@ -12,11 +12,11 @@ const int DELAY_TIME = 10;
 ///
 // Port Setup
 ///
-const int MOTORS_PER_SIDE = 3; // Motors per side of drive
+const int MOTORS_PER_SIDE = 2; // Motors per side of drive
 
 // Make the port negative if it's reversed
-const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {-4, 3, -5}; // Ports, the first number will be used for sensing
-const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {7, -8, 6}; // Ports, the first number will be used for sensing
+const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {1 ,2}; // Ports, the first number will be used for sensing
+const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {3 ,4}; // Ports, the first number will be used for sensing
 
 // IMU Port
 #define IMU_PORT 11
@@ -30,8 +30,8 @@ const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {7, -8, 6}; // Ports, the first nu
 // Remember that 4" wheels are actually 4.125"!
 // If you tune an inch conversion not listed below, tell us you have it with a pull request!
 const float WHEEL_DIA = 4.125; // Have the robot go 8ft forward and adjust this value until the robot actually goes 8ft
-const float CART_RPM  = 600;   // Output RPM of the cart
-const float RATIO     = 2.333; // External drive ratio (MUST BE DECIMAL)
+const float CART_RPM  = 200;   // Output RPM of the cart
+const float RATIO     = 1.666; // External drive ratio (MUST BE DECIMAL)
 // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
 // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
 
@@ -42,16 +42,16 @@ const float RATIO     = 2.333; // External drive ratio (MUST BE DECIMAL)
 ///
 
 // Arcade Control...
-/*
+
 const bool TANK_CONTROL = false;
 #define LEFT_JOYSTICK  pros::E_CONTROLLER_ANALOG_LEFT_Y   // This is the "forward" stick
-#define RIGHT_JOYSTICK pros::E_CONTROLLER_ANALOG_RIGHT_X  // This is the "turning" stick
-*/
+#define RIGHT_JOYSTICK pros::E_CONTROLLER_ANALOG_LEFT_X  // This is the "turning" stick
+
 ///*
 // Tank Control...
-const bool TANK_CONTROL = true;
-#define LEFT_JOYSTICK  pros::E_CONTROLLER_ANALOG_LEFT_Y
-#define RIGHT_JOYSTICK pros::E_CONTROLLER_ANALOG_RIGHT_Y
+// const bool TANK_CONTROL = true;
+// #define LEFT_JOYSTICK  pros::E_CONTROLLER_ANALOG_LEFT_Y
+// #define RIGHT_JOYSTICK pros::E_CONTROLLER_ANALOG_RIGHT_Y
 //*/
 
 // Do you want a button to toggle between arcade and tank?

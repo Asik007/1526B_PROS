@@ -44,6 +44,10 @@ chassis_motor_init() {
     pros::Motor a(abs(L_CHASSIS_PORTS[i]), MOTOR_GEARSET_6, is_reversed(L_CHASSIS_PORTS[i]), MOTOR_ENCODER_COUNTS);
     pros::Motor b(abs(R_CHASSIS_PORTS[i]), MOTOR_GEARSET_6, is_reversed(R_CHASSIS_PORTS[i]), MOTOR_ENCODER_COUNTS);
   }
+  Lower_Claw();
+  Raise_Claw();
+  intake_stop();
+  
 }
 
 // Set drive
