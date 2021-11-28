@@ -33,3 +33,5 @@ bool imu_calibrate();
 
 int sgn(int input);
 float clip_num(float input, float max, float min);
+
+extern double pi;

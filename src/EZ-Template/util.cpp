@@ -7,6 +7,8 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include "main.h"
 
 
+double pi = 2*acos(0.0);
+
 void
 print_ez_template() {
   std::cout << R"(
@@ -34,6 +36,9 @@ bool is_reversed(int input) {
 
 pros::Motor l_motor(abs(L_CHASSIS_PORTS[0]), MOTOR_GEARSET_6, is_reversed(L_CHASSIS_PORTS[0]), MOTOR_ENCODER_COUNTS);
 pros::Motor r_motor(abs(R_CHASSIS_PORTS[0]), MOTOR_GEARSET_6, is_reversed(R_CHASSIS_PORTS[0]), MOTOR_ENCODER_COUNTS);
+pros::ADIEncoder left_encoder (left_TOP,left_BOT,inv_left);
+pros::ADIEncoder right_encoder (right_TOP,right_BOT,inv_right);
+
 
 pros::Imu gyro(IMU_PORT);
 
@@ -89,10 +94,13 @@ reset_drive_sensor() {
   r_motor.tare_position();
 }
 
-int right_sensor()   { return r_motor.get_position(); }
+//int right_sensor()   { return r_motor.get_position(); }
 int right_velocity() { return r_motor.get_actual_velocity(); }
+int right_sensor() {return right_encoder.get_value();}
 
-int left_sensor()    { return l_motor.get_position(); }
+
+// int left_sensor()    { return l_motor.get_position(); }
+int left_sensor() {return left_encoder.get_value();}
 int left_velocity()  { return l_motor.get_actual_velocity(); }
 
 

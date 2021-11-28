@@ -15,13 +15,19 @@ const int DELAY_TIME = 10;
 const int MOTORS_PER_SIDE = 2; // Motors per side of drive
 
 // Make the port negative if it's reversed
-const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {1 ,2}; // Ports, the first number will be used for sensing
+const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {-1 ,-2}; // Ports, the first number will be used for sensing
 const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {3 ,4}; // Ports, the first number will be used for sensing
 
 // IMU Port
 #define IMU_PORT 11
 
-
+//odometry wheels
+#define left_TOP 'A'
+#define left_BOT 'B'
+#define right_TOP'C'
+#define right_BOT 'D'
+#define inv_right true
+#define inv_left true
 
 ///
 // Wheel Size
@@ -66,7 +72,7 @@ const bool ARCADE_TANK_TOGGLE = false; // True is yes, false is no
 ///
 
 const bool  CURVE_TYPE         = true;  // true is red, false is blue in the demos link above
-const bool  DISBALE_CONTROLLER = false; // If false, allows controller to modify CURVE_SCALE.
+const bool  DISBALE_CONTROLLER = true; // If false, allows controller to modify CURVE_SCALE.
                                         // if true, locks STARTING_LEFT_CURVE_SCALE and STARTING_RIGHT_CURVE_SCALE to whatever it's set to.
 
 // Arcade uses two sticks to control, and you need control over the curve on each stick.

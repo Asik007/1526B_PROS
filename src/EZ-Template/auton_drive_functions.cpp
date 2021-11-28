@@ -157,7 +157,7 @@ reset_swing_constants() {
 
 
 const float TICK_PER_REV  = (50*(3600/CART_RPM)) * RATIO; // with no cart, the encoder reads 50 counts per rotation
-const float CIRCUMFERENCE = WHEEL_DIA*M_PI;
+const float CIRCUMFERENCE = WHEEL_DIA*pi;
 const float TICK_PER_INCH = (TICK_PER_REV/CIRCUMFERENCE);
 
 
