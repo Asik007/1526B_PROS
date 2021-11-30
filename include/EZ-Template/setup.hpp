@@ -24,7 +24,7 @@ const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {3 ,4}; // Ports, the first number
 //odometry wheels
 #define left_TOP 'A'
 #define left_BOT 'B'
-#define right_TOP'C'
+#define right_TOP 'C'
 #define right_BOT 'D'
 #define inv_right true
 #define inv_left true
