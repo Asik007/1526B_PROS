@@ -17,8 +17,11 @@ extern bool claw_state;
 void intake_on();
 void intake_rvr();
 void intake_stop();
-extern int intake_state;
-extern int prev_intake_state;
+extern int state;
+void intake_control();
+void sol_control();
+void lift_control();
+void print_stuff();
 
 
 

@@ -48,6 +48,7 @@
 // More includes here...
 #include "autons.hpp"
 #include "ETC.h"
+#include <iostream>
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

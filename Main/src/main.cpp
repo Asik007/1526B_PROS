@@ -93,12 +93,16 @@ initialize() {
   auto_select(false);
   pros::lcd::register_btn0_cb(page_down);
   pros::lcd::register_btn2_cb(page_up);
-  if(!imu_calibrate()) {
-    pros::lcd::set_text(7, "IMU failed to calibrate!");
-  }
+  
   
 
   chassis_motor_init();
+  if(!imu_calibrate()) {
+    
+  pros::lcd::set_text(4, "op time");
+  // pros::lcd::set_text(7, "IMU failed to calibrate!");
+  }
+
 }
 
 /**
@@ -144,6 +148,7 @@ autonomous() {
   drive_pid.resume();
 
   auto_select(true);
+  pros::lcd::set_text(6, "POG");
 }
 
 /**
@@ -166,7 +171,7 @@ std::string lift;
 std::string str_back_lift;
 void
 opcontrol() {
-  
+  pros::lcd::set_text(5, "op time");
   pros::Controller master (CONTROLLER_MASTER);
   drive_pid.suspend();
   reset_drive_sensor();
@@ -174,36 +179,12 @@ opcontrol() {
 
   while (true) {
     chassis_joystick_control();
-    if(master.get_digital(DIGITAL_X) == true){
-      Raise_lift();
-    }
-    if (master.get_digital(DIGITAL_Y)== true){
-      Lower_lift();
-    }
-    if(master.get_digital(DIGITAL_A)){
-      Lower_Claw();
-    }
-    if(master.get_digital(DIGITAL_B)){
-      Raise_Claw();
-    }
-    if(master.get_digital(DIGITAL_UP)){
-      Raise_Back();
-    }
-    if(master.get_digital(DIGITAL_DOWN)){
-      Lower_Back();
-    }
-    if(lift_state != prev_intake_state){
-      if(intake_state == 1){ intake = "ON";} 
-      if(intake_state == 0){ intake = "STOP";} 
-      if(intake_state == -1){ intake = "REV";} 
-      master.set_text(0, 8, intake);
-    }
+    
+    intake_control();
+    sol_control();
+    lift_control();
 
-    if(back_state != true){ str_back_lift = "UP";master.set_text(0, 8, str_back_lift);} 
-    if(back_state != false){ str_back_lift = "DOWN";master.set_text(0, 8, str_back_lift);} 
-
-    if(lift_state == true){ lift = "UP";master.set_text(0, 8, lift);} 
-    if(lift_state == false){ lift = "DOWN";master.set_text(0, 8, lift);} 
+    print_stuff();
     pros::delay(DELAY_TIME);
   }
 }

@@ -16,7 +16,10 @@ const int MOTORS_PER_SIDE = 2; // Motors per side of drive
 
 // Make the port negative if it's reversed
 const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {-1 ,-2}; // Ports, the first number will be used for sensing
-const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {3 ,4}; // Ports, the first number will be used for sensing
+const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {9 ,4}; // Ports, the first number will be used for sensing
+
+const float JS_str = .7;
+const float JS_turn = .5;
 
 // IMU Port
 #define IMU_PORT 11
@@ -28,6 +31,7 @@ const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {3 ,4}; // Ports, the first number
 #define right_BOT 'D'
 #define inv_right true
 #define inv_left true
+#define ODO_radii 5
 
 ///
 // Wheel Size
@@ -61,8 +65,8 @@ const bool TANK_CONTROL = false;
 //*/
 
 // Do you want a button to toggle between arcade and tank?
-const bool ARCADE_TANK_TOGGLE = false; // True is yes, false is no
-#define TOGGLE_BUTTON pros::E_CONTROLLER_DIGITAL_UP // If above is true, this button will toggle the drive
+// const bool ARCADE_TANK_TOGGLE = false; // True is yes, false is no
+// #define TOGGLE_BUTTON pros::E_CONTROLLER_DIGITAL_UP // If above is true, this button will toggle the drive
 
 
 
@@ -71,20 +75,20 @@ const bool ARCADE_TANK_TOGGLE = false; // True is yes, false is no
 //  -adds an input curve to the joysticks, here https://www.desmos.com/calculator/rcfjjg83zx
 ///
 
-const bool  CURVE_TYPE         = true;  // true is red, false is blue in the demos link above
-const bool  DISBALE_CONTROLLER = true; // If false, allows controller to modify CURVE_SCALE.
+// const bool  CURVE_TYPE         = true;  // true is red, false is blue in the demos link above
+// const bool  DISBALE_CONTROLLER = true; // If false, allows controller to modify CURVE_SCALE.
                                         // if true, locks STARTING_LEFT_CURVE_SCALE and STARTING_RIGHT_CURVE_SCALE to whatever it's set to.
 
 // Arcade uses two sticks to control, and you need control over the curve on each stick.
-// these buttons only do anything when DISABLE_CONTROLLER is FALSE
-#define DECREASE_L_CURVE pros::E_CONTROLLER_DIGITAL_LEFT  // decrease left joystick curve
-#define INCREASE_L_CURVE pros::E_CONTROLLER_DIGITAL_RIGHT // increase left joystick curve
-#define DECREASE_R_CURVE pros::E_CONTROLLER_DIGITAL_Y     // decrease right joystick curve (disabled when TANK_CONTROL = false)
-#define INCREASE_R_CURVE pros::E_CONTROLLER_DIGITAL_A     // increase right joystick curve (disabled when TANK_CONTROL = false)
+// // these buttons only do anything when DISABLE_CONTROLLER is FALSE
+// #define DECREASE_L_CURVE pros::E_CONTROLLER_DIGITAL_LEFT  // decrease left joystick curve
+// #define INCREASE_L_CURVE pros::E_CONTROLLER_DIGITAL_RIGHT // increase left joystick curve
+// #define DECREASE_R_CURVE pros::E_CONTROLLER_DIGITAL_Y     // decrease right joystick curve (disabled when TANK_CONTROL = false)
+// #define INCREASE_R_CURVE pros::E_CONTROLLER_DIGITAL_A     // increase right joystick curve (disabled when TANK_CONTROL = false)
 
-const double STARTING_LEFT_CURVE_SCALE  = 0;     // Starting value for curve (if 0, linear graph)
-const double STARTING_RIGHT_CURVE_SCALE = 0;     // Starting value for curve (if 0, linear graph) (disabled when TANK_CONTROL = false)
-const double CURVE_MODIFY_INTERVAL      = 0.1;   // When you modify the scaler with the controller, it will increase/decrease by this interval
+// const double STARTING_LEFT_CURVE_SCALE  = 0;     // Starting value for curve (if 0, linear graph)
+// const double STARTING_RIGHT_CURVE_SCALE = 0;     // Starting value for curve (if 0, linear graph) (disabled when TANK_CONTROL = false)
+// const double CURVE_MODIFY_INTERVAL      = 0.1;   // When you modify the scaler with the controller, it will increase/decrease by this interval
 
 
 

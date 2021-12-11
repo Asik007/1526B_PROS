@@ -1,0 +1,33 @@
+1   left
+2   left
+3   
+4   right
+5   Left_lift
+6   Right_lift
+7   intake
+8
+9   right
+
+A   left odometry
+B   left odometry
+C   right odometry
+D   right odometry
+E
+F   Claw_sol 
+G   Back_sol
+H
+
+----Controller----
+
+A   Raise_Claw
+B   Lower_Claw
+X   Raise_lift
+Y   Lower_lift
+
+UP      cycle intake
+DOWN    intake stop
+LEFT    intake on
+RIGHT   intake rvr
+
+LEFT1   Raise_Back
+LEFT2   Lower_Back
