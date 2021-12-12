@@ -16,7 +16,7 @@ const int MOTORS_PER_SIDE = 2; // Motors per side of drive
 
 // Make the port negative if it's reversed
 const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {-1 ,-2}; // Ports, the first number will be used for sensing
-const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {9 ,4}; // Ports, the first number will be used for sensing
+const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {14 ,15}; // Ports, the first number will be used for sensing
 
 const float JS_str = .7;
 const float JS_turn = .5;

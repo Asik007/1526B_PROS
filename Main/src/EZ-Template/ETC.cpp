@@ -16,8 +16,8 @@ std::string back_state_str;
 std::string claw_state_str; 
 std::string lift_state_str;
 
-pros::Motor Left_lift (5, Lift_rvr);
-pros::Motor Right_lift (6, !Lift_rvr);
+pros::Motor Left_lift (19, Lift_rvr);
+pros::Motor Right_lift (20, !Lift_rvr);
 bool lift_state;
 // bool prev_lift_state;
 void Raise_lift(){
@@ -66,7 +66,7 @@ void Lower_Claw(){
 }
 
 
-pros::Motor intake (7);
+pros::Motor intake (10);
 
 
 void intake_on(){

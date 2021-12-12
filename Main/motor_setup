@@ -1,12 +1,12 @@
 1   left
 2   left
-3   
-4   right
-5   Left_lift
-6   Right_lift
-7   intake
+14  right
+15  right
+19   Left_lift
+20   Right_lift
+10   intake
 8
-9   right
+9   
 
 A   left odometry
 B   left odometry
