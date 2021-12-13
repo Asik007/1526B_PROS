@@ -1,6 +1,7 @@
 #include "main.h"
 
 
+
 int state = 0;
 bool Lift_rvr = true;
 float intake_CE = .5;
@@ -16,25 +17,25 @@ std::string back_state_str;
 std::string claw_state_str; 
 std::string lift_state_str;
 
-pros::Motor Left_lift (19, Lift_rvr);
-pros::Motor Right_lift (20, !Lift_rvr);
+pros::Motor Left_lift (Left_lift_port, Lift_rvr);
+pros::Motor Right_lift (Right_lift_port, !Lift_rvr);
 bool lift_state;
 // bool prev_lift_state;
-void Raise_lift(){
-    Left_lift.move_voltage(10000);
-    Right_lift.move_voltage(10000);
+void Raise_lift(int pog){
+    Left_lift.move_voltage(10000*pog);
+    Right_lift.move_voltage(10000*pog);
     lift_state = true;
 }
-void Lower_lift(){
-    Left_lift.move_voltage(-10000);
-    Right_lift.move_voltage(-10000);
+void Lower_lift(int pog){
+    Left_lift.move_voltage(-10000*pog);
+    Right_lift.move_voltage(-10000*pog);
     lift_state = false;
 }
 
 
 
-pros::ADIAnalogOut Claw_sol ('F');
-pros::ADIAnalogOut Back_sol ('G');
+pros::ADIAnalogOut Claw_sol (claw_sol);
+pros::ADIAnalogOut Back_sol (back_sol);
 bool back_state;
 bool claw_state;
 // bool prev_back_state;
@@ -66,7 +67,7 @@ void Lower_Claw(){
 }
 
 
-pros::Motor intake (10);
+pros::Motor intake (intake_port);
 
 
 void intake_on(){
@@ -88,15 +89,15 @@ void lift_control(){
     if(master.get_digital(DIGITAL_X) == true){
       // pros::lcd::clear();
       // pros::lcd::print("POGGERS 1");
-      Raise_lift();
+      Raise_lift(1);
     }
     if(master.get_digital(DIGITAL_Y)== true){
-      Lower_lift();
+      Lower_lift(1);
     }
     }
     else{
-    Left_lift.move(0);
-    Right_lift.move(0);
+    Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     }
 
 

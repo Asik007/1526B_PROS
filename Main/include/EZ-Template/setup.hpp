@@ -16,7 +16,7 @@ const int MOTORS_PER_SIDE = 2; // Motors per side of drive
 
 // Make the port negative if it's reversed
 const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {-1 ,-2}; // Ports, the first number will be used for sensing
-const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {14 ,15}; // Ports, the first number will be used for sensing
+const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {6 ,7}; // Ports, the first number will be used for sensing
 
 const float JS_str = .7;
 const float JS_turn = .5;
@@ -33,6 +33,13 @@ const float JS_turn = .5;
 #define inv_left true
 #define ODO_radii 5
 
+#define Left_lift_port 19
+#define Right_lift_port 20
+
+#define intake_port 10
+
+#define claw_sol 'F'
+#define back_sol 'G'
 ///
 // Wheel Size
 //  -for tick to inch conversion
