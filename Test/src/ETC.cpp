@@ -162,5 +162,6 @@ void print_stuff(){
     pros::lcd::print(3,claw_state_str.c_str());
     pros::lcd::print(4, s.c_str());
     pros::lcd::print(5,lift_state_str.c_str());
+    pros::lcd::print(6,chassis.left_tracker())
 
 }

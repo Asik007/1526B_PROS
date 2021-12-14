@@ -33,9 +33,10 @@ void Lower_lift(int pog){
 }
 
 
+pros::ADIDigitalOut Claw_sol (claw_sol);
+pros::ADIDigitalOut Back_sol (back_sol);
+// pros::ADIDigitalOut POGL (5);
 
-pros::ADIAnalogOut Claw_sol (claw_sol);
-pros::ADIAnalogOut Back_sol (back_sol);
 bool back_state;
 bool claw_state;
 // bool prev_back_state;
@@ -44,25 +45,31 @@ bool claw_state;
 
 void Raise_Back(){
     // prev_back_state = back_state;
-    Back_sol.set_value(4095);
+    Back_sol.set_value(true);
+    // POGL.set_value(true);
+    // Back_sol.set_value(4095);
+
     back_state = true;
 }
 
 void Lower_Back(){
     // prev_back_state = back_state;    
-    Back_sol.set_value(0);
+    Back_sol.set_value(false);
+    // Back_sol.set_value(0);
+    // POGL.set_value(false);
+
     back_state = false;
 }
 
 void Raise_Claw(){
     // prev_claw_state = claw_state;
-    Back_sol.set_value(0);
+    Claw_sol.set_value(true);
     claw_state = true;
 }
 
 void Lower_Claw(){
     // prev_claw_state = claw_state;
-    Back_sol.set_value(4095);
+    Claw_sol.set_value(false);
     claw_state = false;
 }
 
