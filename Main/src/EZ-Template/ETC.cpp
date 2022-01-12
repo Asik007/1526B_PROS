@@ -4,7 +4,7 @@
 
 int state = 0;
 bool Lift_rvr = true;
-float intake_CE = .5;
+float intake_CE = 1;
 
 
 // const char* str_true = "true";
@@ -25,11 +25,14 @@ void Raise_lift(int pog){
     Left_lift.move_voltage(10000*pog);
     Right_lift.move_voltage(10000*pog);
     lift_state = true;
+    
+    return;
 }
 void Lower_lift(int pog){
     Left_lift.move_voltage(-10000*pog);
     Right_lift.move_voltage(-10000*pog);
     lift_state = false;
+    return;
 }
 
 
@@ -91,21 +94,31 @@ void intake_stop(){
 
 
 void lift_control(){
+    Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
-    if(master.get_digital(DIGITAL_X) || master.get_digital(DIGITAL_Y) == true){
+
+    
+    std::string lift_debug = std::to_string(Left_lift.get_actual_velocity());pros::lcd::print(2,lift_debug.c_str());
+        
     if(master.get_digital(DIGITAL_X) == true){
       // pros::lcd::clear();
       // pros::lcd::print("POGGERS 1");
       Raise_lift(1);
+    
     }
     if(master.get_digital(DIGITAL_Y)== true){
       Lower_lift(1);
     }
-    }
-    else{
-    Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    }
+    Lower_lift(0);
+
+    // Left_lift.move_voltage(10000*0);
+    // Right_lift.move_voltage(10000*0);
+
+
+    // Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    // Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    
 
 
 }

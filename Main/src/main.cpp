@@ -7,7 +7,7 @@
  */
 void
 disable_all_tasks() {
-  drive_pid.suspend();
+  // drive_pid.suspend();
 }
 
 /**
@@ -97,11 +97,11 @@ initialize() {
   
 
   chassis_motor_init();
-  if(!imu_calibrate()) {
+  // if(!imu_calibrate()) {
     
-  pros::lcd::set_text(4, "op time");
-  // pros::lcd::set_text(7, "IMU failed to calibrate!");
-  }
+  // pros::lcd::set_text(4, "op time");
+  // // pros::lcd::set_text(7, "IMU failed to calibrate!");
+  // }
 
 }
 
@@ -142,11 +142,6 @@ competition_initialize() {
  */
 void
 autonomous() {
-  tare_gyro();
-  reset_drive_sensor();
-  set_drive_brake(MOTOR_BRAKE_HOLD);
-  drive_pid.resume();
-
   auto_select(true);
   pros::lcd::set_text(6, "POG");
 }
@@ -173,18 +168,20 @@ void
 opcontrol() {
   pros::lcd::set_text(5, "op time");
   pros::Controller master (CONTROLLER_MASTER);
-  drive_pid.suspend();
+  // drive_pid.suspend();
   reset_drive_sensor();
   set_drive_brake(MOTOR_BRAKE_COAST); // This is preference to what you like to drive on
 
   while (true) {
     chassis_joystick_control();
-    
+    if(master.get_digital(DIGITAL_R2) && master.get_digital(DIGITAL_R1) == true){
+      auton_drive(30);
+    }
     intake_control();
     sol_control();
     lift_control();
 
-    print_stuff();
+    // print_stuff();
     pros::delay(DELAY_TIME);
   }
 }
