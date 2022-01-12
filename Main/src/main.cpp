@@ -161,11 +161,13 @@ autonomous() {
  */
 
 
-std::string intake;
-std::string lift;
+// std::string intake;
+// std::string lift;
 std::string str_back_lift;
 void
 opcontrol() {
+    // Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    // Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   pros::lcd::set_text(5, "op time");
   pros::Controller master (CONTROLLER_MASTER);
   // drive_pid.suspend();
@@ -175,7 +177,7 @@ opcontrol() {
   while (true) {
     chassis_joystick_control();
     if(master.get_digital(DIGITAL_R2) && master.get_digital(DIGITAL_R1) == true){
-      auton_drive(30);
+      test_auton();
     }
     intake_control();
     sol_control();

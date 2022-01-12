@@ -10,5 +10,5 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 void track(void);
 void control_loop(void);
 void auton_drive(double dist);
-void turn(int degree, int direction);
+void auton_turn(int degree, int direction);
 extern int motor_power;

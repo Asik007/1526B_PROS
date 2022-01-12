@@ -81,14 +81,14 @@ pros::Motor intake (intake_port);
 
 
 void intake_on(){
-    intake.move(127*intake_CE);
+    intake.move_voltage(12000*intake_CE);
 }
 
 void intake_rvr(){
-    intake.move(-127*intake_CE);
+    intake.move_voltage(-12000*intake_CE);
 }
 void intake_stop(){
-    intake.move(0);
+    intake.move_voltage(0);
 }
 
 
@@ -100,7 +100,7 @@ void lift_control(){
 
     
     std::string lift_debug = std::to_string(Left_lift.get_actual_velocity());pros::lcd::print(2,lift_debug.c_str());
-        
+    if(master.get_digital(DIGITAL_X) || master.get_digital(DIGITAL_Y) == true){    
     if(master.get_digital(DIGITAL_X) == true){
       // pros::lcd::clear();
       // pros::lcd::print("POGGERS 1");
@@ -110,7 +110,12 @@ void lift_control(){
     if(master.get_digital(DIGITAL_Y)== true){
       Lower_lift(1);
     }
-    Lower_lift(0);
+    }
+    else{
+    Left_lift.move_voltage(0);
+    Right_lift.move_voltage(0);
+    }
+    // Lower_lift(0);
 
     // Left_lift.move_voltage(10000*0);
     // Right_lift.move_voltage(10000*0);
@@ -142,6 +147,7 @@ void sol_control(){
 }
 
 void intake_control(){
+    intake.set_brake_mode(MOTOR_BRAKE_COAST);
 
     if(master.get_digital_new_press(DIGITAL_UP)==true){
     pros::lcd::clear_line(4);
@@ -170,6 +176,8 @@ void print_stuff(){
     if(lift_state == true){lift_state_str = str_true;}
     if(lift_state == false){lift_state_str = str_false;}
     std::string s = std::to_string(state);
+    std::string lift_mtr = std::to_string(motor_power);
+
 
 
     pros::lcd::clear_line(2);

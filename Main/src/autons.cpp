@@ -108,6 +108,10 @@ auto_5() {
 ///
 void
 test_auton() {
+  auton_drive(30);
+  auton_turn(30,-1);
+  pros::lcd::clear;
+  pros::lcd::set_text(3, "auton done");
 
 }
 
