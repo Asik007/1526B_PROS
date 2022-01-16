@@ -18,8 +18,8 @@ const int MOTORS_PER_SIDE = 2; // Motors per side of drive
 const int  L_CHASSIS_PORTS[MOTORS_PER_SIDE] = {-1 ,-2}; // Ports, the first number will be used for sensing
 const int  R_CHASSIS_PORTS[MOTORS_PER_SIDE] = {4 ,5}; // Ports, the first number will be used for sensing
 
-const float JS_str = .7;
-const float JS_turn = .5;
+const float JS_str = .9;
+const float JS_turn = .7;
 
 // IMU Port
 #define IMU_PORT 11

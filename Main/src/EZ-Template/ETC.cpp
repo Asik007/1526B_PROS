@@ -186,7 +186,7 @@ void print_stuff(){
     pros::lcd::clear_line(3);
 
 
-    pros::lcd::print(2,back_state_str.c_str());
+    pros::lcd::print(2,lift_mtr.c_str());
     pros::lcd::print(3,claw_state_str.c_str());
     pros::lcd::print(4, s.c_str());
     pros::lcd::print(5,lift_state_str.c_str());

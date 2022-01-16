@@ -62,19 +62,22 @@ void control_loop_turn_R(void){
 
 
 void auton_drive(double dist){
+  while(motor_power > 10 || motor_power == 0){
   des_dist = dist;
   track();
   control_loop_drive();
-  if(motor_power < 10){motor_power = 0;}
   set_left_chassis(127*(motor_power/100));
   set_right_chassis(127*(motor_power/100));
   pros::delay(20);
   if(des_dist < 3){return;}
 }
+}
 
 //-1 = left
 void auton_turn(int degree, int direction){
-  des_dist = degree;
+  dist_to_L = ((direction*degree)/360)*pi*W2W_dis;
+  dist_to_R = ((-1*direction*degree)/360)*pi*W2W_dis;
+ while(dist_to_L > .5 || dist_to_R > .5){
   dist_to_L = ((direction*degree)/360)*pi*W2W_dis;
   dist_to_R = ((-1*direction*degree)/360)*pi*W2W_dis;
   track();
@@ -82,4 +85,5 @@ void auton_turn(int degree, int direction){
   control_loop_turn_R();
   set_left_chassis(127*(motor_power_L/100));
   set_right_chassis(127*(motor_power_R/100));
+}
 }

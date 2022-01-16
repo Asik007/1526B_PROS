@@ -108,9 +108,16 @@ auto_5() {
 ///
 void
 test_auton() {
-  auton_drive(30);
-  auton_turn(30,-1);
+  std::string lift_mtr = std::to_string(motor_power);
   pros::lcd::clear;
+  auton_drive(30);
+  left_encoder.reset();
+  right_encoder.reset();  
+  auton_turn(30,-1);
+  left_encoder.reset();
+  right_encoder.reset();
+  pros::lcd::clear;
+  pros::lcd::set_text(2,lift_mtr.c_str());
   pros::lcd::set_text(3, "auton done");
 
 }

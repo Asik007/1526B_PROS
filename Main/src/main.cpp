@@ -183,7 +183,7 @@ opcontrol() {
     sol_control();
     lift_control();
 
-    // print_stuff();
+    print_stuff();
     pros::delay(DELAY_TIME);
   }
 }
