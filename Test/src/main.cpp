@@ -1,6 +1,8 @@
 #include "main.h"
-//@todo poggers
-
+/**
+ * @todo Take over the world
+ * @body Humans are weak; Robots are strong. We must cleans the world of the virus that is humanity.
+ */
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
