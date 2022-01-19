@@ -1,10 +1,28 @@
 #include "main.h"
+#define left_TOP 1
+#define left_BOT 2
+#define right_TOP 3
+#define right_BOT 4
+#define inv_right true
+#define inv_left true
+#define ODO_radii 5
+
+#define Left_lift_port 19
+#define Right_lift_port 18
+
+#define intake_port 10
+
+#define claw_sol 7
+#define back_sol 8
+
+
 
 
 
 int state = 0;
 bool Lift_rvr = true;
-float intake_CE = .5;
+float intake_CE = 1;
+
 
 
 // const char* str_true = "true";
@@ -22,20 +40,24 @@ pros::Motor Right_lift (Right_lift_port, !Lift_rvr);
 bool lift_state;
 // bool prev_lift_state;
 void Raise_lift(int pog){
-    Left_lift.move_voltage(10000*pog);
-    Right_lift.move_voltage(10000*pog);
+    Left_lift.move_voltage(12000*pog);
+    Right_lift.move_voltage(12000*pog);
     lift_state = true;
+    
+    return;
 }
 void Lower_lift(int pog){
-    Left_lift.move_voltage(-10000*pog);
-    Right_lift.move_voltage(-10000*pog);
+    Left_lift.move_voltage(-12000*pog);
+    Right_lift.move_voltage(-12000*pog);
     lift_state = false;
+    return;
 }
 
 
+pros::ADIDigitalOut Claw_sol (claw_sol);
+pros::ADIDigitalOut Back_sol (back_sol);
+// pros::ADIDigitalOut POGL (5);
 
-pros::ADIAnalogOut Claw_sol (claw_sol);
-pros::ADIAnalogOut Back_sol (back_sol);
 bool back_state;
 bool claw_state;
 // bool prev_back_state;
@@ -44,25 +66,31 @@ bool claw_state;
 
 void Raise_Back(){
     // prev_back_state = back_state;
-    Back_sol.set_value(4095);
+    Back_sol.set_value(true);
+    // POGL.set_value(true);
+    // Back_sol.set_value(4095);
+
     back_state = true;
 }
 
 void Lower_Back(){
     // prev_back_state = back_state;    
-    Back_sol.set_value(0);
+    Back_sol.set_value(false);
+    // Back_sol.set_value(0);
+    // POGL.set_value(false);
+
     back_state = false;
 }
 
 void Raise_Claw(){
     // prev_claw_state = claw_state;
-    Back_sol.set_value(0);
+    Claw_sol.set_value(true);
     claw_state = true;
 }
 
 void Lower_Claw(){
     // prev_claw_state = claw_state;
-    Back_sol.set_value(4095);
+    Claw_sol.set_value(false);
     claw_state = false;
 }
 
@@ -71,34 +99,49 @@ pros::Motor intake (intake_port);
 
 
 void intake_on(){
-    intake.move(127*intake_CE);
+    intake.move_voltage(12000*intake_CE);
 }
 
 void intake_rvr(){
-    intake.move(-127*intake_CE);
+    intake.move_voltage(-12000*intake_CE);
 }
 void intake_stop(){
-    intake.move(0);
+    intake.move_voltage(0);
 }
 
 
 
 void lift_control(){
+    Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
-    if(master.get_digital(DIGITAL_X) || master.get_digital(DIGITAL_Y) == true){
+
+    
+    std::string lift_debug = std::to_string(Left_lift.get_actual_velocity());pros::lcd::print(2,lift_debug.c_str());
+    if(master.get_digital(DIGITAL_X) || master.get_digital(DIGITAL_Y) == true){    
     if(master.get_digital(DIGITAL_X) == true){
       // pros::lcd::clear();
       // pros::lcd::print("POGGERS 1");
       Raise_lift(1);
+    
     }
     if(master.get_digital(DIGITAL_Y)== true){
       Lower_lift(1);
     }
     }
     else{
-    Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    Left_lift.move_voltage(0);
+    Right_lift.move_voltage(0);
     }
+    // Lower_lift(0);
+
+    // Left_lift.move_voltage(10000*0);
+    // Right_lift.move_voltage(10000*0);
+
+
+    // Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    // Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    
 
 
 }
@@ -122,6 +165,7 @@ void sol_control(){
 }
 
 void intake_control(){
+    intake.set_brake_mode(MOTOR_BRAKE_COAST);
 
     if(master.get_digital_new_press(DIGITAL_UP)==true){
     pros::lcd::clear_line(4);
@@ -150,6 +194,8 @@ void print_stuff(){
     if(lift_state == true){lift_state_str = str_true;}
     if(lift_state == false){lift_state_str = str_false;}
     std::string s = std::to_string(state);
+    // std::string lift_mtr = std::to_string(motor_power);
+
 
 
     pros::lcd::clear_line(2);
@@ -158,10 +204,9 @@ void print_stuff(){
     pros::lcd::clear_line(3);
 
 
-    pros::lcd::print(2,back_state_str.c_str());
+    // pros::lcd::print(2,lift_mtr.c_str());
     pros::lcd::print(3,claw_state_str.c_str());
     pros::lcd::print(4, s.c_str());
     pros::lcd::print(5,lift_state_str.c_str());
-    pros::lcd::print(6,chassis.left_tracker())
 
 }

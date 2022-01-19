@@ -34,7 +34,7 @@ const float JS_turn = .7;
 #define ODO_radii 5
 
 #define Left_lift_port 19
-#define Right_lift_port 20
+#define Right_lift_port 18
 
 #define intake_port 10
 

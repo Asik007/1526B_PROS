@@ -1,3 +1,4 @@
+#include "ETC.h"
 /**
  * \file main.h
  *
@@ -42,8 +43,10 @@
 //#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
 #include "EZ-Template/api.hpp"
+
+// More includes here...
 #include "autons.hpp"
-#include "ETC.h"
+
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
  * Motor, you can use the namespace with the following commented out line.
@@ -55,12 +58,14 @@
 // using namespace pros;
 // using namespace pros::literals;
 // using namespace okapi;
+// using namespace ez;
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
  * that they can be called from user code (i.e. calling autonomous from a
  * button press in opcontrol() for testing purposes).
  */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

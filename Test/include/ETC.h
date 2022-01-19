@@ -1,13 +1,5 @@
 #pragma once
 
-#define Left_lift_port 19
-#define Right_lift_port 20
-
-#define intake_port 10
-
-#define claw_sol 'F'
-#define back_sol 'G'
-
 //true state = Lift or claw is open
 
 void Raise_lift();

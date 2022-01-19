@@ -1,52 +1,66 @@
 #include "main.h"
 
+/*
+Tracking_Wheel left_p  {pros::Motor(7,true),  4.125, 600, 7.0625, 1.875};
+Tracking_Wheel right_p {pros::Motor(4), 4.125, 600, 7.0625, 1.875};
+// Chassis constructor
+Drive chassis (
+  {-7, -8, 9},{4, 3, -2}
 
-/////
-// For instalattion, upgrading, documentations and tutorials, check out website!
-// https://ez-robotics.github.io/EZ-Template/
-/////
+  // Left Tracker
+  ,&left_p
+
+  // Right Tracker
+  ,&right_p
+
+  ,11
+);
 
 
+
+double width = 12.75;
+Tracking_Wheel left_p  {pros::Motor(11,true),  3.25, 600, width/2, 1.6667};
+Tracking_Wheel right_p {pros::Motor(2), 3.25, 600, width/2, 1.6667};
+// Chassis constructor
+Drive chassis (
+  {-11, -5, -7},{2, 3, 17}
+
+  // Left Tracker
+  ,&left_p
+
+  // Right Tracker
+  ,&right_p
+);
+
+*/
 
 // Chassis constructor
 Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
-  //   the first port is the sensored port (when trackers are not used!)
-  {-1, -2,}
+  {1, -2, 3}
 
   // Right Chassis Ports (negative port will reverse it!)
-  //   the first port is the sensored port (when trackers are not used!)
-  ,{4, 5,}
+  ,{-4, 5, -6}
 
   // IMU Port
-  ,7
+  ,-1
 
-  // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
-  //    (or tracking wheel diameter)
+  // Tracking Wheel Diameter (Remember, 4" wheels are actually 4.125!)
   ,4.125
 
-  // Cartridge RPM
-  //   (or tick per rotation if using tracking wheels)
-  ,200
+  // Ticks per Rotation of Encoder
+  ,360
 
-  // External Gear Ratio (MUST BE DECIMAL)
-  //    (or gear ratio of tracking wheel)
-  // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
-  // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
+  // External Gear Ratio of Tracking Wheel (MUST BE DECIMAL)
+  // eg. if your drive is 84:36 where the 36t is sensored, your RATIO would be 2.333.
+  // eg. if your drive is 36:60 where the 60t is sensored, your RATIO would be 0.6.
   ,1
 
-  // Uncomment if using tracking wheels
-  
   // Left Tracking Wheel Ports (negative port will reverse it!)
   ,{1, 2}
 
   // Right Tracking Wheel Ports (negative port will reverse it!)
-  ,{3, 4}
-  
-
-  // Uncomment if tracking wheels are plugged into a 3 wire expander
-  // 3 Wire Port Expander Smart Port
-  // ,1
+  ,{-3, -4}
 );
 
 
@@ -60,20 +74,20 @@ Drive chassis (
 void initialize() {
   // Print our branding over your terminal :D
   ez::print_ez_template();
-
+  
   pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
   // Configure your chassis controls
   chassis.toggle_modify_curve_with_controller(false); // Enables modifying the controller curve with buttons on the joysticks
   chassis.set_active_brake(0); // Sets the active brake kP. We recommend 0.1.
-  chassis.set_curve_default(0, 0); // Defaults for curve. (Comment this line out if you have an SD card!)
-  // default_constants(); // Set the drive to your own constants from autons.cpp!
+  chassis.set_curve_default(0, 0); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)  
+  default_constants(); // Set the drive to your own constants from autons.cpp!
 
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
-  // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);
+  // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
-  // Autonomous Selector using LLEMMU
+  // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
     Auton("Example Drive\n\nDrive forward and come back.", drive_example),
     Auton("Example Turn\n\nTurn 3 times.", turn_example),
@@ -129,11 +143,25 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+  chassis.reset_pid_targets(); // Resets PID targets to 0
   chassis.reset_gyro(); // Reset gyro position to 0
   chassis.reset_drive_sensor(); // Reset drive sensors to 0
-  chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency. 
+  chassis.reset_odom(); // Resets x, y and angle to 0
+  chassis.set_drive_brake(pros::E_MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector. 
+  int dist = 18;
+  int speed = 110;
+  chassis.go_to_point(ez::FWD, dist, dist, speed);
+  chassis.wait_drive();
+
+  chassis.go_to_point(ez::REV, 0, dist*2, speed);
+  chassis.wait_drive();
+
+  chassis.go_to_point(ez::FWD, -dist, dist, speed);
+  chassis.wait_drive();
+
+  chassis.go_to_point(ez::REV, 0, 0, speed);
+  chassis.wait_drive();
 }
 
 
@@ -159,19 +187,17 @@ void opcontrol() {
 
     // chassis.tank(); // Tank control
     // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
-    chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+    // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
-    // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+    chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+    intake_control();
+    sol_control();
+    lift_control();
 
     // . . .
     // Put more user control code here!
     // . . .
 
-    intake_control();
-    sol_control();
-    lift_control();
-
-    print_stuff();
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }

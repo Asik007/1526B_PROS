@@ -6,6 +6,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #pragma once
 
+#include "EZ-Template/Odometry/tracking_wheel.hpp"
 #include "EZ-Template/PID.hpp"
 #include "EZ-Template/auton.hpp"
 #include "EZ-Template/auton_selector.hpp"

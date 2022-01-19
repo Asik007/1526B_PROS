@@ -28,11 +28,10 @@ int motor_power_R = 0;
 double dist_to = 0;
 int dist_to_L = 0;
 int dist_to_R = 0;
-double intens = 7.5;
-double intens_T = 7.5;
+double intens = .37;
+double intens_T = .37;
 
-double offs = 10;
-double offs_T = 10;
+
 
 void track(void){
   delta_enc[0] = prev_enc[0];
@@ -43,11 +42,11 @@ void track(void){
 
 void control_loop_drive(void){
   dist_to = des_dist - ((delta_enc[0]+delta_enc[1])/2);
-  motor_power = 100/(pow((1+2.71282), (-1*intens*(dist_to - offs))));
+  motor_power = (100/(pow((1+2.71282), (-1*intens*(dist_to)))))-50;
 }
 
 float turn_func(double dist_to_end){
-return (100/(pow((1+2.71282), (-1*intens_T*(dist_to - offs_T)))));
+return (100/(pow((1+2.71282), (-1*intens*(dist_to_end)))))-50;
 }
 
 void control_loop_turn_L(void){
@@ -69,7 +68,6 @@ void auton_drive(double dist){
   set_left_chassis(127*(motor_power/100));
   set_right_chassis(127*(motor_power/100));
   pros::delay(20);
-  if(des_dist < 3){return;}
 }
 }
 

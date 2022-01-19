@@ -26,35 +26,53 @@ const int SWING_SPEED = 90;
 void default_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(chassis.backward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 5,0,35,0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
-
 /*
+void default_constants() {
+  chassis.set_slew_min_power(80, 80);
+  chassis.set_slew_distance(7, 7);
+  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+}
+*/
+
+
 
 void one_mogo_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(chassis.backward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
 
 void two_mogo_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(chassis.backward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
+  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
-*/
+
+
+void modified_exit_condition() {
+  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
+  chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
+  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
+}
+
 
 
 
@@ -184,7 +202,7 @@ void combining_movements() {
   chassis.set_turn_pid(45, TURN_SPEED);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(ez::RIGHT_SWING, -45, TURN_SPEED);
+  chassis.set_swing_pid(ez::RIGHT_SWING, -45, TURN_SPEED);
   chassis.wait_drive();
 
   chassis.set_turn_pid(0, TURN_SPEED);
@@ -212,7 +230,7 @@ void tug (int attempts) {
       chassis.set_drive_pid(-2, 20);
       pros::delay(1000);
     }
-    // If robot succesfully drove back, return
+    // If robot successfully drove back, return
     else {
       return;
     }

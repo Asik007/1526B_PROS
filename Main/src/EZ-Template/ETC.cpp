@@ -22,15 +22,15 @@ pros::Motor Right_lift (Right_lift_port, !Lift_rvr);
 bool lift_state;
 // bool prev_lift_state;
 void Raise_lift(int pog){
-    Left_lift.move_voltage(10000*pog);
-    Right_lift.move_voltage(10000*pog);
+    Left_lift.move_voltage(12000*pog);
+    Right_lift.move_voltage(12000*pog);
     lift_state = true;
     
     return;
 }
 void Lower_lift(int pog){
-    Left_lift.move_voltage(-10000*pog);
-    Right_lift.move_voltage(-10000*pog);
+    Left_lift.move_voltage(-12000*pog);
+    Right_lift.move_voltage(-12000*pog);
     lift_state = false;
     return;
 }
