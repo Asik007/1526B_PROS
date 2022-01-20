@@ -25,7 +25,7 @@ void print_ez_template() {
                                      |_|
 )" << '\n';
 
-  printf("Version: 2.1.0-RC5\n");
+  printf("Version: 2.1.1\n");
 }
 std::string get_last_word(std::string text) {
   std::string word = "";
@@ -51,7 +51,7 @@ std::string get_rest_of_the_word(std::string text, int position) {
   }
   return word;
 }
-
+//All iance\n\nWE WIN THESE!!!!! 
 void print_to_screen(std::string text, int line) {
   int CurrAutoLine = line;
   std::vector<string> texts = {};
@@ -64,9 +64,9 @@ void print_to_screen(std::string text, int line) {
         texts.push_back(temp);
         temp = text[i];
       } else {
-        int size = last_word.length();
+        int size = last_word.length(); 
 
-        auto rest_of_word = get_rest_of_the_word(text, i);
+        auto rest_of_word = get_rest_of_the_word(text, i); 
         temp.erase(temp.length() - size, size);
         texts.push_back(temp);
         last_word += rest_of_word;
@@ -76,6 +76,7 @@ void print_to_screen(std::string text, int line) {
           texts.push_back(temp);
           break;
         }
+        
       }
     }
     if (i >= text.length() - 1) {
@@ -144,24 +145,6 @@ double clip_num(double input, double max, double min) {
   else if (input < min)
     return min;
   return input;
-}
-
-double hypot(double a, double b) {
-  return sqrt(pow(a, 2) + pow(b, 2));
-}
-
-double to_rad(double deg) {
-  return deg * (M_PI / 180);
-}
-
-double to_deg(double rad) {
-  return rad * (180 / M_PI);
-}
-
-double wrap_angle(double theta) {
-  while (theta > 180) theta -= 360;
-  while (theta < -180) theta += 360;
-  return theta;
 }
 
 }  // namespace util
