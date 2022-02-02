@@ -5,6 +5,7 @@ using namespace okapi;
 
 #include "main.h"
 
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -30,7 +31,14 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-
+    // Logger::setDefaultLogger(
+    //     std::make_shared<Logger>(
+    //         TimeUtilFactory::createDefault().getTimer(),
+    //         "/ser/sout",
+    //         Logger::LogLevel::warn
+    //     )
+    // );
+    // Open_valve();
 
 }
 
@@ -63,32 +71,108 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {
-	    std::shared_ptr<okapi::OdomChassisController> chassis =
-        ChassisControllerBuilder()
-		.withMotors({-1,-2},{4,6})
-		// Green gearset, 4 in wheel diam, 11.5 in wheel track
-        .withDimensions({AbstractMotor::gearset::green,(36/72)} ,{{4_in, 12_in}, imev5GreenTPR})
-		.withGains(
-        {0.001, 0, 0.0001}, // Distance controller gains
-        {0.001, 0, 0.0001}, // Turn controller gains
-        {0.001, 0, 0.0001})  // Angle controller gains (helps drive straight))
-		.withSensors(
-        ADIEncoder{'A', 'B', true}, // left encoder in ADI ports A & B
-        ADIEncoder{'C', 'D'})  // right encoder in ADI ports C & D (reversed)
-		.withOdometry({{4.25_in, 12_in}, quadEncoderTPR}, StateMode::FRAME_TRANSFORMATION) // use the same scales as the chassis (above)
-    	.buildOdometry(); // build an odometry chassis
-   // Drive the robot in a square pattern using closed-loop control
-            // for (int i = 0; i < 4; i++) {
-				chassis->setState({0_in, 0_in, 0_deg});
-                // turn 45 degrees and drive approximately 1.4 ft
-				chassis->driveToPoint({1_ft, 1_ft});
-				// turn approximately 45 degrees to end up at 90 degrees
-				chassis->turnToAngle(90_deg);
-				// turn approximately -90 degrees to face {5_ft, 0_ft} which is to the north of the robot
-				chassis->turnToPoint({5_ft, 0_ft});
-            // }
 
+
+// pros::ADIEncoder left ('A', 'B', true);
+// pros:ADIEncoder right ('C', 'D');
+
+
+void autonomous(){
+    std::shared_ptr<okapi::OdomChassisController> drive =
+        ChassisControllerBuilder()
+            .withMotors({-1,-2},{4,6})
+            // Green gearset, 4 in wheel diam, 11.5 in wheel track
+        .withDimensions({AbstractMotor::gearset::green, (84.0 / 60.0)},{{4_in, 12_in}, imev5GreenTPR})
+	// 	.withGains(
+    //     {0.001, 0, 0.0001}, // distance controller gains
+    //     {0.001, 0, 0.0001}, // turn controller gains
+    //     {0.001, 0, 0.0001}  // angle controller gains (helps drive straight)
+    // )
+        .withSensors(
+            ADIEncoder{'A', 'B'}, 
+            ADIEncoder{'C', 'D'})
+        .withOdometry({{3.25_in, 12_in}, quadEncoderTPR}, StateMode::FRAME_TRANSFORMATION)
+        // .withLogger()
+        // .withLogger(
+        // std::make_shared<Logger>(
+        //     TimeUtilFactory::createDefault().getTimer(), // It needs a Timer
+        //     "/ser/sout", // Output to the PROS terminal
+        //     Logger::LogLevel::debug // Most verbose log level
+        // )
+    // )
+        .buildOdometry();
+        // drive->setMaxVelocity(100);
+
+        // drive->moveDistance(1.9_m);
+        // drive->waitUntilSettled();
+        // Raise_Claw();
+        // pros::delay(1000);
+        // drive->moveDistance(-1.75_m);
+        drive->setState({0_in, 0_in, 0_deg});
+// pros::lcd::print("%d", Encoder.get());
+        pros::delay(1000);
+        // drive->driveToPoint({2_ft, 0_ft});
+
+
+        // drive->turnToAngle(90_deg);
+// pros::lcd::print("%d", Encoder.get());
+        // printf(drive->getState().str().c_str());
+// return;
+//         pros::delay(1000);
+//         drive->turnToAngle(180_deg);
+//         // printf(drive->getState().str().c_str());
+// // pros::lcd::print("%d", Encoder.get());
+//         pros::delay(1000);
+
+//         drive->turnToAngle(270_deg);
+//         // pros::lcd::print("%d", Encoder.get());
+//         // printf(drive->getState().str().c_str());
+
+
+//         pros::delay(1000);
+
+//         drive->turnToAngle(0_deg);
+//         // pros::lcd::print("%d", Encoder.get());
+//         // printf(drive->getState().str().c_str());
+
+
+
+
+
+
+
+    //    drive -> turnToPoint({10_ft, 0_ft});
+    //    drive -> turnToPoint({10_ft, 10_ft});
+    //    drive -> turnToPoint({0_ft, 10_ft});
+    //    drive -> turnToPoint({3_ft, 10_ft});
+       
+        drive->driveToPoint({2_ft, 0_ft});
+        pros::delay(1000);
+        printf( drive->getState().str().c_str());
+        std::cout << "step 1 \n";
+        drive->driveToPoint({2_ft, 2_ft});
+        pros::delay(1000);
+        printf( drive->getState().str().c_str());
+
+        std::cout << "step 2 \n";
+        drive->driveToPoint({0_ft, 2_ft});
+        pros::delay(1000);
+        printf( drive->getState().str().c_str());
+
+        
+        std::cout << "step 3 \n";
+        drive->driveToPoint({0_ft, 0_ft});
+        pros::delay(1000);
+        printf( drive->getState().str().c_str());
+
+        
+        std::cout << "step 4 \n";
+        drive->setState({0_in, 0_in, 0_deg});
+        printf( drive->getState().str().c_str());
+
+
+
+        return; 
 }
 
 /**
@@ -108,15 +192,18 @@ void autonomous() {
 
 
 void opcontrol() {
+    // ADIEncoder left ('A','B',true);
+    // ADIEncoder right ('C','D');
+
     // Chassis Controller - lets us drive the robot around with open- or closed-loop control
-    std::shared_ptr<okapi::ChassisController> drive =
+    std::shared_ptr<okapi::ChassisController> opdrive =
         ChassisControllerBuilder()
             .withMotors({-1,-2},{4,6})
             // Green gearset, 4 in wheel diam, 11.5 in wheel track
-        .withDimensions({AbstractMotor::gearset::green,(36/72)} ,{{4_in, 12_in}, imev5GreenTPR})
-		.withSensors(
-        ADIEncoder{'A', 'B', true}, // left encoder in ADI ports A & B
-        ADIEncoder{'C', 'D'})  // right encoder in ADI ports C & D (reversed)
+        .withDimensions({AbstractMotor::gearset::green, (84.0 / 36.0)},{{4_in, 12_in}, imev5GreenTPR})
+		// .withSensors(
+        // ADIEncoder{'A', 'B', true}, // left encoder in ADI ports A & B
+        // ADIEncoder{'C', 'D'})  // right encoder in ADI ports C & D (reversed)
  // build an odometry chassis
         .build();
 
@@ -132,13 +219,21 @@ void opcontrol() {
     
 
     while (true) {
+        // std::cout << drive.
         // Arcade drive with the left stick
-        drive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
+        opdrive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
                                   controller.getAnalog(ControllerAnalog::leftX));
+        // printf( to_string(drive->getModel()->getSensorVals()));
+        // printf(left.get());
+        // printf("%f", left.get());
+        // printf(",   %f", right.get());
+        // printf("\n");
 
-        intake_control();
-		sol_control();
-		lift_control();
+
+
+        intake_control(-1);
+		sol_control(0);
+		lift_control(0);
 		if (runAutoButton1.changedToPressed() && runAutoButton2.changedToPressed() == true) {
          autonomous();
 		}

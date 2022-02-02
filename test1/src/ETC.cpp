@@ -1,8 +1,5 @@
 #include "main.h"
-#define left_TOP 1
-#define left_BOT 2
-#define right_TOP 3
-#define right_BOT 4
+
 #define inv_right true
 #define inv_left true
 #define ODO_radii 5
@@ -14,6 +11,7 @@
 
 #define claw_sol 7
 #define back_sol 8
+#define open_val 6
 
 
 
@@ -39,6 +37,8 @@ pros::Motor Left_lift (Left_lift_port, Lift_rvr);
 pros::Motor Right_lift (Right_lift_port, !Lift_rvr);
 bool lift_state;
 // bool prev_lift_state;
+
+
 void Raise_lift(int pog){
     Left_lift.move_voltage(12000*pog);
     Right_lift.move_voltage(12000*pog);
@@ -56,6 +56,8 @@ void Lower_lift(int pog){
 
 pros::ADIDigitalOut Claw_sol (claw_sol);
 pros::ADIDigitalOut Back_sol (back_sol);
+pros::ADIDigitalOut Main_sol (open_val);
+
 // pros::ADIDigitalOut POGL (5);
 
 bool back_state;
@@ -63,6 +65,14 @@ bool claw_state;
 // bool prev_back_state;
 // bool prev_claw_state;
 
+
+void Open_valve(){
+  Main_sol.set_value(true);
+}
+
+void Close_valve(){
+  Main_sol.set_value(false);
+}
 
 void Raise_Back(){
     // prev_back_state = back_state;
@@ -112,18 +122,25 @@ void intake_stop(){
 
 ControllerButton btnY(ControllerDigital::Y);
 ControllerButton btnX(ControllerDigital::X);
-void lift_control(){
+void lift_control(int lift_ctrl){
     Left_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
 
-    
+    if( lift_ctrl == 0){}
+    if(lift_ctrl == 1){Raise_lift(.5); pros::delay(500); return;}
+    if(lift_ctrl == 2){Lower_lift(.5); pros::delay(500); return;}
+
     std::string lift_debug = std::to_string(Left_lift.get_actual_velocity());pros::lcd::print(2,lift_debug.c_str());
     if(btnY.isPressed() || btnX.isPressed() == true){    
     if(btnX.isPressed() == true){
       // pros::lcd::clear();
       // pros::lcd::print("POGGERS 1");
       Raise_lift(1);
+      
+
+      
+
     
     }
     if(btnY.isPressed()== true){
@@ -153,7 +170,14 @@ ControllerButton btnL2(ControllerDigital::L2);
 
 
 
-void sol_control(){
+void sol_control(int sol_ctrl){
+    if(sol_ctrl == 0){}
+    if(sol_ctrl == 1){Raise_Claw();return;}
+    if(sol_ctrl == 2){Lower_Claw(); return;}
+    if(sol_ctrl == 3){Raise_Back(); return;}
+    if(sol_ctrl == 4){Lower_Back(); return;}
+    
+
     if(btnA.isPressed()){
       Raise_Claw();
     }
@@ -172,24 +196,40 @@ ControllerButton btnUP(ControllerDigital::up);
 ControllerButton btnL(ControllerDigital::left);
 ControllerButton btnR(ControllerDigital::right);
 ControllerButton btnDWN(ControllerDigital::down);
-void intake_control(){
+int makeshiftwait = 0;
+void intake_control(int state_ctrl){
     intake.set_brake_mode(MOTOR_BRAKE_COAST);
-
+    // std::cout << "Motor Current Draw: " << Right_lift.get_current_draw();
+          // std::cout << "Motor Current Draw: " << intake.get_efficiency() << "\n";
+      // pros::delay(1000);
+      
+    if (state_ctrl == -1){}
+    else{
+      state = state_ctrl;
+    }
     if(btnUP.changedToPressed()==true){
     pros::lcd::clear_line(4);
     // pros::lcd::print(4,"i was pressed");
     ++state;
     }
 
-    if(btnL.isPressed()==true){state = 1;}
-    if(btnR.isPressed()==true){state = 2;}
+    if(btnL.isPressed()==true){state = 2;}
+    if(btnR.isPressed()==true){state = 1;}
     if(btnDWN.isPressed()==true){state = 0;}
     if(state == 0){intake_stop(); }
-    if(state == 1){intake_on();}
-    if(state == 2){intake_rvr();}
+    if(state == 2){intake_on();}
+    if(state == 1){intake_rvr();}
+    if(intake.get_efficiency() < 10 && state > 0){
+  state = 2;
+      // intake.move_relative(720, 200); 
+    // std::cout << "plz work \n";
+          // std::cout << "Motor Current Draw: " << intake.get_efficiency() << "\n";
+    }
+    //  pros::delay(50);}
     if(state >= 3){state = 0;}
     // std::string s = std::to_string(state);
     // const *pchar = s.c_str();  //use char const* as target type
+
 }
 
 // void print_stuff(){
