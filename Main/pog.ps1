@@ -5,5 +5,6 @@ $pog = Get-Content $pros -raw | ConvertFrom-Json
 $pog.'py/state'.project_name = "Code ${time}"
 $pog | ConvertTo-Json -depth 32| set-content $pros
 Write-Output $time
-pros build;
-pros upload
+pros build> $house/build.txt;;
+pros upload ;
+pros terminal > $house/output.txt;
