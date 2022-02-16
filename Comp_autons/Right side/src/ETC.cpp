@@ -9,8 +9,8 @@
 
 #define intake_port 10
 
-#define claw_sol 7
-#define back_sol 8
+#define claw_sol 4
+#define back_sol 5
 #define open_val 6
 
 
@@ -94,13 +94,13 @@ void Lower_Back(){
 
 void Raise_Claw(){
     // prev_claw_state = claw_state;
-    Claw_sol.set_value(true);
+    Claw_sol.set_value(false);
     claw_state = true;
 }
 
 void Lower_Claw(){
     // prev_claw_state = claw_state;
-    Claw_sol.set_value(false);
+    Claw_sol.set_value(true);
     claw_state = false;
 }
 
@@ -109,11 +109,11 @@ pros::Motor intake (intake_port);
 
 
 void intake_on(){
-    intake.move_voltage(12000*intake_CE);
+    intake.move_voltage(12000);
 }
 
 void intake_rvr(){
-    intake.move_voltage(-12000*intake_CE);
+    intake.move_voltage(-12000);
 }
 void intake_stop(){
     intake.move_voltage(0);

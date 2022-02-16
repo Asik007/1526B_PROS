@@ -79,25 +79,45 @@ void competition_initialize() {}
 
 void autonomous(){
 
-    std::shared_ptr<okapi::ChassisController> drive =
+    std::shared_ptr<okapi::OdomChassisController> drive =
         ChassisControllerBuilder()
             .withMotors({-1,-2},{4,6})
             // Green gearset, 4 in wheel diam, 11.5 in wheel track
-        .withDimensions({AbstractMotor::gearset::green, (84.0 / 36.0)},{{4_in, 12_in}, imev5GreenTPR})
-		// .withSensors(
-        // ADIEncoder{'A', 'B', true}, // left encoder in ADI ports A & B
-        // ADIEncoder{'C', 'D'})  // right encoder in ADI ports C & D (reversed)
- // build an odometry chassis
-        .build();
+        .withDimensions({AbstractMotor::gearset::green, (84.0 / 60.0)},{{4_in, 12_in}, imev5GreenTPR})
+	// 	.withGains(
+    //     {0.001, 0, 0.0001}, // distance controller gains
+    //     {0.001, 0, 0.0001}, // turn controller gains
+    //     {0.001, 0, 0.0001}  // angle controller gains (helps drive straight)
+    // )
+        .withSensors(
+            ADIEncoder{'A', 'B'}, 
+            ADIEncoder{'C', 'D'})
+        .withOdometry({{3.25_in, 12_in}, quadEncoderTPR}, StateMode::FRAME_TRANSFORMATION)
+        // .withLogger()
+        // .withLogger(
+        // std::make_shared<Logger>(
+        //     TimeUtilFactory::createDefault().getTimer(), // It needs a Timer
+        //     "/ser/sout", // Output to the PROS terminal
+        //     Logger::LogLevel::debug // Most verbose log level
+        // )
+    // )
+        .buildOdometry();
 
-    drive->moveDistance(3_ft);
-    Raise_Claw();
-    drive->turnAngle(-20_deg);
-    drive->moveDistance(-1_ft);
-    Raise_Back();
-    drive->moveDistance(1_ft);
-    drive->turnAngle(20_deg);
-    drive->moveDistance(-3_ft);
+drive->driveToPoint({2_ft, 0_ft});
+drive->driveToPoint({2_ft, 2_ft});
+drive->driveToPoint({0_ft, 2_ft});
+drive->driveToPoint({0_ft, 0_ft});
+
+
+
+    // drive->moveDistance(3_ft);
+    // Raise_Claw();
+    // drive->turnAngle(-20_deg);
+    // drive->moveDistance(-1_ft);
+    // Raise_Back();
+    // drive->moveDistance(1_ft);
+    // drive->turnAngle(20_deg);
+    // drive->moveDistance(-2_ft);
 
     // drive->moveDistance(3_ft);
     // Lower_Claw();

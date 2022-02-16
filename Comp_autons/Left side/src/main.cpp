@@ -84,20 +84,51 @@ void autonomous(){
             .withMotors({-1,-2},{4,6})
             // Green gearset, 4 in wheel diam, 11.5 in wheel track
         .withDimensions({AbstractMotor::gearset::green, (84.0 / 36.0)},{{4_in, 12_in}, imev5GreenTPR})
-		// .withSensors(
-        // ADIEncoder{'A', 'B', true}, // left encoder in ADI ports A & B
-        // ADIEncoder{'C', 'D'})  // right encoder in ADI ports C & D (reversed)
+		.withSensors(
+        ADIEncoder{'F', 'G', true}, // left encoder in ADI ports A & B
+        ADIEncoder{'A', 'B'})  // right encoder in ADI ports C & D (reversed)
  // build an odometry chassis
         .build();
 
-    drive->moveDistance(3_ft);
-    Raise_Claw();
-    drive->turnAngle(-20_deg);
-    drive->moveDistance(-1_ft);
-    Raise_Back();
-    drive->moveDistance(1_ft);
-    drive->turnAngle(20_deg);
-    drive->moveDistance(-3_ft);
+// okapi::AbstractTimer(0);
+// std::cout << getDt();
+    Lower_Claw();
+
+
+
+//     drive->moveDistanceAsync(3.5_ft);
+//     pros::delay(1500);
+//     pros::delay(250);
+//     Raise_Claw();   
+//     lift_control(1);
+
+
+//     drive -> waitUntilSettled();
+
+//     drive->turnAngleAsync(-20_deg);
+
+//     drive -> waitUntilSettled();
+//     // drive->moveDistance(-2_ft);
+// std::cout << "\n";
+//     drive->moveDistance(-3_ft);
+//     pros::delay(500);
+//     Raise_Back();
+//     pros::delay(500);
+//     intake_control(-2);
+//     pros::delay(500);
+//     intake_control(-1);
+//     pros::delay(500);
+
+
+
+
+
+// drive ->movetopoint
+    // intake_rvr();
+    // pros::delay(500);
+    // drive->moveDistance(2.5_ft);
+    // drive->turnAngle(20_deg);
+    // drive->moveDistance(-3_ft);
 
     // drive->moveDistance(3_ft);
     // Lower_Claw();
@@ -107,8 +138,7 @@ void autonomous(){
     // drive->moveDistance(1_ft);
     // drive->turnAngle(20_deg);
     // drive->moveDistance(-3_ft);
-
-
+return;
 }
 //     std::shared_ptr<okapi::OdomChassisController> drive =
 //         ChassisControllerBuilder()

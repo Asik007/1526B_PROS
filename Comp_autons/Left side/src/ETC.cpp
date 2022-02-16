@@ -7,10 +7,10 @@
 #define Left_lift_port 19
 #define Right_lift_port 18
 
-#define intake_port 10
+#define intake_port 8
 
-#define claw_sol 7
-#define back_sol 8
+#define claw_sol 4
+#define back_sol 5
 #define open_val 6
 
 
@@ -94,13 +94,13 @@ void Lower_Back(){
 
 void Raise_Claw(){
     // prev_claw_state = claw_state;
-    Claw_sol.set_value(true);
+    Claw_sol.set_value(false);
     claw_state = true;
 }
 
 void Lower_Claw(){
     // prev_claw_state = claw_state;
-    Claw_sol.set_value(false);
+    Claw_sol.set_value(true);
     claw_state = false;
 }
 
@@ -110,13 +110,20 @@ pros::Motor intake (intake_port);
 
 void intake_on(){
     intake.move_voltage(12000*intake_CE);
+    std::cout << "intake:" << intake.get_voltage();
+
 }
 
 void intake_rvr(){
     intake.move_voltage(-12000*intake_CE);
+    std::cout << "intake:" << intake.get_voltage();
+
+   
 }
 void intake_stop(){
     intake.move_voltage(0);
+    std::cout << "intake:" << intake.get_voltage();
+
 }
 
 
@@ -128,7 +135,7 @@ void lift_control(int lift_ctrl){
     
 
     if( lift_ctrl == 0){}
-    if(lift_ctrl == 1){Raise_lift(.5); pros::delay(500); return;}
+    if(lift_ctrl == 1){Raise_lift(.5); pros::delay(300); return;}
     if(lift_ctrl == 2){Lower_lift(.5); pros::delay(500); return;}
 
     std::string lift_debug = std::to_string(Left_lift.get_actual_velocity());pros::lcd::print(2,lift_debug.c_str());
@@ -161,7 +168,7 @@ void lift_control(int lift_ctrl){
     // Right_lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
 
-
+return;
 }
 ControllerButton btnA(ControllerDigital::A);
 ControllerButton btnB(ControllerDigital::B);
@@ -203,9 +210,9 @@ void intake_control(int state_ctrl){
           // std::cout << "Motor Current Draw: " << intake.get_efficiency() << "\n";
       // pros::delay(1000);
       
-    if (state_ctrl == -1){}
+    if (state_ctrl <= 0){}
     else{
-      state = state_ctrl;
+      state = abs(state_ctrl);
     }
     if(btnUP.changedToPressed()==true){
     pros::lcd::clear_line(4);
