@@ -1,50 +1,5 @@
 #include "main.h"
 
-///
-// Constants
-///
-
-// Reset all constants to default (what's in setup.hpp is default)
-void
-reset_constants() {
-}
-
-// Functions to change constants
-// (if the robot has different weight to it, sometimes we need to change constants)
-/*
-void
-one_mogo_constants() {
-  set_slew_min_power(80, 80);
-  set_slew_distance(7, 7);
-  set_fw_drive_constants(0.45, 5);
-  set_bw_drive_constants(0.375, 4);
-  set_turn_constants(5, 0.003, 35);
-  set_turn_i_constants(15, 30);
-  set_swing_constants(12, 35);
-}
-
-void
-two_mogo_constants() {
-  set_slew_min_power(80, 80);
-  set_slew_distance(7, 7);
-  set_fw_drive_constants(0.45, 5);
-  set_bw_drive_constants(0.375, 4);
-  set_turn_constants(5, 0.003, 35);
-  set_turn_i_constants(15, 30);
-  set_swing_constants(12, 35);
-}
-*/
-
-
-
-// All drive movements use the "set_drive_pid" function
-// the first parameter is the type of motion (drive, turn, r_swing, l_swing)
-// below are example codes using each type
-
-
-///
-// Drive Example
-///
 void
 auto_1() {
   // The second parameter is target inches
@@ -92,7 +47,7 @@ auto_4() {
 
 
 ///
-// Swing Example
+//    Example
 ///
 void
 auto_5() {
@@ -106,22 +61,6 @@ auto_5() {
 ///
 // Auto that tests everything
 ///
-void
-test_auton() {
-  std::string lift_mtr = std::to_string(motor_power);
-  pros::lcd::clear;
-  auton_drive(30);
-  left_encoder.reset();
-  right_encoder.reset();  
-  auton_turn(30,-1);
-  left_encoder.reset();
-  right_encoder.reset();
-  pros::lcd::clear;
-  pros::lcd::set_text(2,lift_mtr.c_str());
-  pros::lcd::set_text(3, "auton done");
-
-}
-
 
 
 void
